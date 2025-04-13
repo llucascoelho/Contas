@@ -1,0 +1,668 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <!-- Meta viewport atualizado -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Controle de Contas - Modo Noturno</title>
+  
+  <!-- Fonte do Google com crossorigin -->
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet" crossorigin="anonymous">
+  
+  <!-- Bootstrap 5 CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" 
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+  
+  <style>
+    /* Reset e configurações principais (modo noturno) */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      font-family: 'Roboto', sans-serif;
+      background-color: #121212;
+      color: #e0e0e0;
+      padding: 30px;
+    }
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      background-color: #1e1e1e;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+    }
+    h1 {
+      text-align: center;
+      margin-bottom: 20px;
+      font-weight: 500;
+      color: #ffffff;
+    }
+    .form-group {
+      margin-bottom: 20px;
+    }
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 500;
+      color: #ffffff;
+    }
+    /* Uso das classes Bootstrap para selects e inputs */
+    select.form-select,
+    input.form-control {
+      width: 100%;
+      padding: 10px 15px;
+      border: 1px solid #444;
+      border-radius: 5px;
+      font-size: 16px;
+      background-color: #2a2a2a;
+      color: #ffffff;
+      transition: none;
+    }
+    select.form-select:focus,
+    input.form-control:focus {
+      outline: none;
+      border-color: #444;
+      box-shadow: none;
+      background-color: #2a2a2a;
+      color: #ffffff;
+    }
+    .date-container {
+      margin-bottom: 10px;
+    }
+    /* Estilo das flags */
+    .flag-checkbox {
+      display: inline-flex;
+      align-items: center;
+      margin-top: 10px;
+      margin-left: 0;
+      font-size: 14px;
+      color: #6200ea;
+      cursor: pointer;
+      position: relative;
+    }
+    .flag-checkbox input[type="checkbox"] {
+      appearance: none;
+      width: 16px;
+      height: 16px;
+      border: 1px solid #6200ea;
+      border-radius: 3px;
+      margin-right: 5px;
+      cursor: pointer;
+      position: relative;
+      background-color: transparent;
+    }
+    .flag-checkbox input[type="checkbox"]:checked::after {
+      content: "✓";
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 14px;
+      color: #fff;
+    }
+    fieldset {
+      display: none;
+      border: 1px solid #444;
+      padding: 20px;
+      margin-bottom: 20px;
+      border-radius: 8px;
+      animation: fadeIn 0.5s ease-in-out;
+    }
+    fieldset.active {
+      display: block;
+    }
+    legend {
+      padding: 0 10px;
+      font-size: 18px;
+      font-weight: 500;
+      color: #6200ea;
+    }
+    .conditional {
+      display: none;
+      margin-top: 20px;
+      padding-left: 15px;
+      border-left: 3px solid #6200ea;
+    }
+    .text-center {
+      text-align: center;
+    }
+    button {
+      background-color: #6200ea;
+      color: #ffffff;
+      border: none;
+      padding: 12px 30px;
+      font-size: 18px;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s, transform 0.3s;
+    }
+    button:hover {
+      background-color: #3700b3;
+      transform: translateY(-3px);
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @media (max-width: 600px) {
+      .container {
+        padding: 15px;
+      }
+      select.form-select,
+      input.form-control {
+        font-size: 14px;
+        padding: 8px 12px;
+      }
+      button {
+        font-size: 16px;
+        padding: 10px 20px;
+      }
+      h1 {
+        font-size: 24px;
+      }
+    }
+    /* Modal padrão (mantendo as cores do modo noturno) */
+    .modal-content {
+      background-color: #1e1e1e;
+      color: #e0e0e0;
+    }
+    .modal-header, .modal-footer {
+      border: none;
+    }
+    .btn-close {
+      filter: invert(1);
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <form id="contasForm" action="#" method="post">
+      <h1>Controle de Contas</h1>
+      
+      <!-- Seletor Geral -->
+      <div class="form-group">
+        <label for="formSelector">Selecione a Conta</label>
+        <select id="formSelector" name="formSelector" class="form-select">
+          <option value="">Selecione uma opção</option>
+          <option value="Casa">Casa</option>
+          <option value="Gastos">Gastos</option>
+          <option value="Luna">Luna</option>
+          <option value="Pessoal">Pessoal</option>
+        </select>
+      </div>
+      
+      <!-- Fieldset Casa -->
+      <fieldset id="casa">
+        <legend>Casa</legend>
+        <div class="form-group">
+          <label for="CasaTipoConta">Tipo da conta</label>
+          <select id="CasaTipoConta" class="form-select">
+            <option value="">Selecione</option>
+            <option value="Água">Água</option>
+            <option value="Luz">Luz</option>
+            <option value="Gás">Gás</option>
+            <option value="Internet">Internet</option>
+            <option value="Condomínio">Condomínio</option>
+          </select>
+        </div>
+        <div class="conditional" id="casaCampos">
+          <div class="date-container">
+            <label for="condDataVencimento">Data de vencimento</label>
+            <input type="date" id="condDataVencimento" class="form-control">
+            <label for="flag-condDataVencimento" class="flag-checkbox">
+              <input type="checkbox" id="flag-condDataVencimento" class="flag-hoje"> Hoje
+            </label>
+          </div>
+          <div class="form-group">
+            <label for="condValor">Valor (R$)</label>
+            <input type="text" id="condValor" data-currency placeholder="R$" class="form-control" inputmode="decimal">
+          </div>
+          <div class="date-container">
+            <label for="condDataPagamento">Data de pagamento</label>
+            <input type="date" id="condDataPagamento" class="form-control">
+            <label for="flag-condDataPagamento" class="flag-checkbox">
+              <input type="checkbox" id="flag-condDataPagamento" class="flag-hoje"> Hoje
+            </label>
+            <br>
+            <!-- Flag: Pagamento na data de vencimento -->
+            <label for="flag-condPgtoDataVenc" class="flag-checkbox">
+              <input type="checkbox" id="flag-condPgtoDataVenc" class="flag-hoje"> Pagamento na data de vencimento
+            </label>
+          </div>
+          <div class="form-group">
+            <label for="condValorPagamento">Valor de pagamento (R$)</label>
+            <input type="text" id="condValorPagamento" data-currency placeholder="R$" class="form-control" inputmode="decimal">
+            <br>
+            <!-- Flag: Valor total -->
+            <label for="flag-valorTotal" class="flag-checkbox">
+              <input type="checkbox" id="flag-valorTotal" class="flag-hoje"> Valor total
+            </label>
+          </div>
+        </div>
+      </fieldset>
+      
+      <!-- Fieldset Gastos -->
+      <fieldset id="gastos">
+        <legend>Gastos</legend>
+        <div class="form-group">
+          <label for="gastosTipoConta">Tipo da conta</label>
+          <select id="gastosTipoConta" class="form-select">
+            <option value="">Selecione</option>
+            <option value="Casa">Casa</option>
+            <option value="Mercado">Mercado</option>
+            <option value="Gasolina">Gasolina</option>
+          </select>
+        </div>
+        <div class="conditional" id="gastosCampos">
+          <div class="form-group">
+            <label for="gastoDesc">Descrição</label>
+            <input type="text" id="gastoDesc" class="form-control">
+          </div>
+          <div class="date-container">
+            <label for="gastoData">Data</label>
+            <input type="date" id="gastoData" class="form-control">
+            <label for="flag-gastoData" class="flag-checkbox">
+              <input type="checkbox" id="flag-gastoData" class="flag-hoje"> Hoje
+            </label>
+          </div>
+          <div class="form-group">
+            <label for="gastoValor">Valor (R$)</label>
+            <input type="text" id="gastoValor" data-currency placeholder="R$" class="form-control" inputmode="decimal">
+          </div>
+        </div>
+      </fieldset>
+      
+      <!-- Fieldset Luna -->
+      <fieldset id="luna">
+        <legend>Luna</legend>
+        <div class="form-group">
+          <label for="lunaTipoConta">Tipo da conta</label>
+          <select id="lunaTipoConta" class="form-select">
+            <option value="">Selecione</option>
+            <option value="Areia">Areia</option>
+            <option value="Ração">Ração</option>
+            <option value="Biscoitos e Saches">Biscoitos e Saches</option>
+            <option value="Veterinária">Veterinária</option>
+          </select>
+        </div>
+        <div class="conditional" id="lunaCampos">
+          <div class="form-group">
+            <label for="lunaDesc">Descrição</label>
+            <input type="text" id="lunaDesc" class="form-control">
+          </div>
+          <div class="form-group">
+            <label for="lunaQuantidade">Quantidade</label>
+            <input type="text" id="lunaQuantidade" class="form-control">
+          </div>
+          <div class="date-container">
+            <label for="lunaData">Data</label>
+            <input type="date" id="lunaData" class="form-control">
+            <label for="flag-lunaData" class="flag-checkbox">
+              <input type="checkbox" id="flag-lunaData" class="flag-hoje"> Hoje
+            </label>
+          </div>
+          <div class="form-group">
+            <label for="lunaValor">Valor (R$)</label>
+            <input type="text" id="lunaValor" data-currency placeholder="R$" class="form-control" inputmode="decimal">
+          </div>
+        </div>
+      </fieldset>
+      
+      <!-- Fieldset Pessoal -->
+      <fieldset id="pessoal">
+        <legend>Pessoal</legend>
+        <div class="form-group">
+          <label for="pessoalTipoConta">Tipo da conta</label>
+          <select id="pessoalTipoConta" class="form-select">
+            <option value="">Selecione</option>
+            <option value="Cartão de Crédito">Cartão de Crédito</option>
+          </select>
+        </div>
+        <div class="conditional" id="pessoalCampos">
+          <div class="form-group">
+            <label for="ccCompetencia">Mês/Ano - Competência</label>
+            <input type="text" id="ccCompetencia" placeholder="mm/aaaa" pattern="(0[1-9]|1[0-2])\/\d{4}" title="Digite no formato mm/aaaa" class="form-control">
+          </div>
+          <div class="date-container">
+            <label for="ccDataVencimento">Data de vencimento</label>
+            <input type="date" id="ccDataVencimento" class="form-control">
+            <label for="flag-ccDataVencimento" class="flag-checkbox">
+              <input type="checkbox" id="flag-ccDataVencimento" class="flag-hoje"> Hoje
+            </label>
+          </div>
+          <div class="form-group">
+            <label for="ccValor">Valor (R$)</label>
+            <input type="text" id="ccValor" data-currency placeholder="R$" class="form-control" inputmode="decimal">
+          </div>
+          <div class="date-container">
+            <label for="ccDataPagamento">Data de pagamento</label>
+            <input type="date" id="ccDataPagamento" class="form-control">
+            <label for="flag-ccDataPagamento" class="flag-checkbox">
+              <input type="checkbox" id="flag-ccDataPagamento" class="flag-hoje"> Hoje
+            </label>
+            <br>
+            <!-- Flag: Pagamento na data de vencimento (Pessoal) -->
+            <label for="flag-ccPgtoDataVenc" class="flag-checkbox">
+              <input type="checkbox" id="flag-ccPgtoDataVenc" class="flag-hoje"> Pagamento na data de vencimento
+            </label>
+          </div>
+          <div class="form-group">
+            <label for="ccValorPagamento">Valor de pagamento (R$)</label>
+            <input type="text" id="ccValorPagamento" data-currency placeholder="R$" class="form-control" inputmode="decimal">
+            <br>
+            <!-- Flag: Valor total (Pessoal) -->
+            <label for="flag-ccValorTotal" class="flag-checkbox">
+              <input type="checkbox" id="flag-ccValorTotal" class="flag-hoje"> Valor total
+            </label>
+          </div>
+        </div>
+      </fieldset>
+      
+      <!-- Botão centralizado -->
+      <div class="text-center">
+        <button type="submit" class="btn btn-primary">Enviar</button>
+      </div>
+    </form>
+  </div>
+  
+  <!-- Modal de Confirmação (Bootstrap 5) -->
+  <div class="modal fade" id="confirmModal" tabindex="-1" aria-labelledby="confirmModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header" style="background-color: #1e1e1e; border-bottom: 1px solid #444;">
+          <h5 class="modal-title" id="confirmModalLabel">Confirmação de Envio</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar" style="filter: invert(1);"></button>
+        </div>
+        <div class="modal-body" style="background-color: #1e1e1e;">
+          <p class="mb-0">Seus dados foram enviados com sucesso!</p>
+        </div>
+        <div class="modal-footer" style="background-color: #1e1e1e; border-top: 1px solid #444;">
+          <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Fechar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Bootstrap 5 JS Bundle (inclui Popper) -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  
+  <script>
+    // Funções de formatação de moeda
+    const currencyInputs = document.querySelectorAll('input[data-currency]');
+    
+    function formatCurrencyField(field) {
+      let value = field.value;
+      let num = parseFloat(value.replace(",", "."));
+      if (isNaN(num)) {
+        field.value = "";
+        return;
+      }
+      field.value = num.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+    }
+    
+    function unformatCurrencyField(field) {
+      let value = field.value;
+      value = value.replace(/R\$\s?/g, "");
+      value = value.replace(/\./g, "").replace(",", ".");
+      return value;
+    }
+    
+    function getNumericValue(field) {
+      const raw = unformatCurrencyField(field);
+      let num = parseFloat(raw);
+      return isNaN(num) ? null : num;
+    }
+    
+    currencyInputs.forEach(input => {
+      input.addEventListener('blur', () => formatCurrencyField(input));
+      input.addEventListener('focus', () => { 
+        input.value = unformatCurrencyField(input); 
+      });
+    });
+    
+    // Formatação do campo Competência
+    const ccCompetenciaField = document.getElementById('ccCompetencia');
+    ccCompetenciaField.addEventListener('blur', function() {
+      let value = this.value.replace(/\D/g, '');
+      if (value.length === 6) {
+        const month = value.substring(0, 2);
+        const year = value.substring(2);
+        this.value = month + '/' + year;
+      }
+    });
+    
+    // Seção Casa
+    document.getElementById('CasaTipoConta').addEventListener('change', function() {
+      const valor = this.value;
+      const block = document.getElementById('casaCampos');
+      block.style.display = (valor !== "") ? 'block' : 'none';
+      const mappingCasa = {
+        "Água": { type: "CasaTipoconta", dataVenc: "CasaDatadevencimento", valor: "CasaValor", dataPag: "CasaDatadepagamento", valorPag: "CasaValordepagamento" },
+        "Luz": { type: "CasaTipoconta", dataVenc: "CasaDatadevencimento", valor: "CasaValor", dataPag: "CasaDatadepagamento", valorPag: "CasaValordepagamento" },
+        "Gás": { type: "CasaTipoconta", dataVenc: "CasaDatadevencimento", valor: "CasaValor", dataPag: "CasaDatadepagamento", valorPag: "CasaValordepagamento" },
+        "Internet": { type: "CasaTipoconta", dataVenc: "CasaDatadevencimento", valor: "CasaValor", dataPag: "CasaDatadepagamento", valorPag: "CasaValordepagamento" },
+        "Condomínio": { type: "CasaTipoconta", dataVenc: "CasaDatadevencimento", valor: "CasaValor", dataPag: "CasaDatadepagamento", valorPag: "CasaValordepagamento" }
+      };
+      if (mappingCasa[valor]) {
+        this.removeAttribute('name');
+        this.dataset.schemaType = mappingCasa[valor].type;
+        const inputs = block.querySelectorAll('input:not([type="checkbox"])');
+        if (inputs.length >= 4) {
+          inputs[0].setAttribute('name', mappingCasa[valor].dataVenc);
+          inputs[1].setAttribute('name', mappingCasa[valor].valor);
+          inputs[2].setAttribute('name', mappingCasa[valor].dataPag);
+          inputs[3].setAttribute('name', mappingCasa[valor].valorPag);
+        }
+      }
+    });
+    
+    // Seção Gastos
+    document.getElementById('gastosTipoConta').addEventListener('change', function() {
+      const valor = this.value;
+      const block = document.getElementById('gastosCampos');
+      block.style.display = (valor !== "") ? 'block' : 'none';
+      const mappingGastos = {
+        "Casa": { type: "GastoTipoconta", desc: "GastoDescrição", data: "GastoData", valor: "GastoValor" },
+        "Mercado": { type: "GastoTipoconta", desc: "GastoDescrição", data: "GastoData", valor: "GastoValor" },
+        "Gasolina": { type: "GastoTipoconta", desc: "GastoDescrição", data: "GastoData", valor: "GastoValor" }
+      };
+      if (mappingGastos[valor]) {
+        this.removeAttribute('name');
+        this.dataset.schemaType = mappingGastos[valor].type;
+        const inputs = block.querySelectorAll('input:not([type="checkbox"])');
+        if (inputs.length >= 3) {
+          inputs[0].setAttribute('name', mappingGastos[valor].desc);
+          inputs[1].setAttribute('name', mappingGastos[valor].data);
+          inputs[2].setAttribute('name', mappingGastos[valor].valor);
+        }
+      }
+    });
+    
+    // Seção Luna
+    document.getElementById('lunaTipoConta').addEventListener('change', function() {
+      const valor = this.value;
+      const block = document.getElementById('lunaCampos');
+      block.style.display = (valor !== "") ? 'block' : 'none';
+      const mappingLuna = {
+        "Areia": { type: "LunaTipoconta", desc: "LunaDescrição", quant: "LunaQuantidade", data: "LunaData", valor: "LunaValor" },
+        "Ração": { type: "LunaTipoconta", desc: "LunaDescrição", quant: "LunaQuantidade", data: "LunaData", valor: "LunaValor" },
+        "Biscoitos e Saches": { type: "LunaTipoconta", desc: "LunaDescrição", quant: "LunaQuantidade", data: "LunaData", valor: "LunaValor" },
+        "Veterinária": { type: "LunaTipoconta", desc: "LunaDescrição", quant: "LunaQuantidade", data: "LunaData", valor: "LunaValor" }
+      };
+      if (mappingLuna[valor]) {
+        this.removeAttribute('name');
+        this.dataset.schemaType = mappingLuna[valor].type;
+        const inputs = block.querySelectorAll('input:not([type="checkbox"])');
+        if (inputs.length >= 4) {
+          inputs[0].setAttribute('name', mappingLuna[valor].desc);
+          inputs[1].setAttribute('name', mappingLuna[valor].quant);
+          inputs[2].setAttribute('name', mappingLuna[valor].data);
+          inputs[3].setAttribute('name', mappingLuna[valor].valor);
+        }
+      }
+    });
+    
+    // Seção Pessoal
+    document.getElementById('pessoalTipoConta').addEventListener('change', function() {
+      const valor = this.value;
+      const block = document.getElementById('pessoalCampos');
+      block.style.display = (valor === "Cartão de Crédito") ? 'block' : 'none';
+      if (valor === "Cartão de Crédito") {
+        const mappingPessoal = {
+          type: "PessoalTipoconta",
+          comp: "PessoalCompetencia",
+          dataVenc: "PessoalDatadevencimento",
+          valor: "PessoalValor",
+          dataPag: "PessoalDatadepagamento",
+          valorPag: "PessoalValordepagamento"
+        };
+        this.removeAttribute('name');
+        this.dataset.schemaType = mappingPessoal.type;
+        const inputs = block.querySelectorAll('input:not([type="checkbox"])');
+        if (inputs.length >= 5) {
+          inputs[0].setAttribute('name', mappingPessoal.comp);
+          inputs[1].setAttribute('name', mappingPessoal.dataVenc);
+          inputs[2].setAttribute('name', mappingPessoal.valor);
+          inputs[3].setAttribute('name', mappingPessoal.dataPag);
+          inputs[4].setAttribute('name', mappingPessoal.valorPag);
+        }
+      }
+    });
+    
+    // Exibe o fieldset conforme o formSelector
+    document.getElementById('formSelector').addEventListener('change', function() {
+      document.querySelectorAll('fieldset').forEach(fs => { fs.classList.remove('active'); });
+      const selected = this.value;
+      if (selected) {
+        const selectedFieldset = document.getElementById(selected.toLowerCase());
+        if (selectedFieldset) { selectedFieldset.classList.add('active'); }
+      }
+    });
+    
+    // Flag "Hoje" para campos de data (os checkboxes agora deixam o check visível)
+    document.querySelectorAll('.flag-hoje').forEach(flag => {
+      flag.addEventListener('change', function() {
+        const container = this.closest('.date-container');
+        if (container) {
+          const dateInput = container.querySelector('input[type="date"]');
+          if (dateInput && this.checked) {
+            const today = new Date();
+            const day = String(today.getDate()).padStart(2, '0');
+            const month = String(today.getMonth() + 1).padStart(2, '0');
+            const year = today.getFullYear();
+            dateInput.value = `${year}-${month}-${day}`;
+          }
+        }
+      });
+    });
+    
+    // Flag: Pagamento na data de vencimento (Casa)
+    document.getElementById('flag-condPgtoDataVenc').addEventListener('change', function() {
+      const dueDate = document.getElementById('condDataVencimento').value;
+      const paymentField = document.getElementById('condDataPagamento');
+      if (this.checked) { paymentField.value = dueDate; }
+    });
+    
+    // Flag: Pagamento na data de vencimento (Pessoal)
+    document.getElementById('flag-ccPgtoDataVenc').addEventListener('change', function() {
+      const dueDate = document.getElementById('ccDataVencimento').value;
+      const paymentField = document.getElementById('ccDataPagamento');
+      if (this.checked) { paymentField.value = dueDate; }
+    });
+    
+    // Flag: Valor total (Casa)
+    document.getElementById('flag-valorTotal').addEventListener('change', function() {
+      const sourceField = document.getElementById('condValor');
+      const targetField = document.getElementById('condValorPagamento');
+      if (this.checked) { targetField.value = sourceField.value; }
+    });
+    
+    // Flag: Valor total (Pessoal)
+    document.getElementById('flag-ccValorTotal').addEventListener('change', function() {
+      const sourceField = document.getElementById('ccValor');
+      const targetField = document.getElementById('ccValorPagamento');
+      if (this.checked) { targetField.value = sourceField.value; }
+    });
+    
+    // Envio dos dados para o Power Automate
+    document.getElementById('contasForm').addEventListener('submit', function(event) {
+      event.preventDefault();
+      
+      const form = this;
+      const formData = new FormData(form);
+      let data = {};
+      formData.forEach((value, key) => { data[key] = value; });
+      
+      // Adiciona os campos de tipo a partir dos datasets
+      const casaTipo = document.getElementById('CasaTipoConta').dataset.schemaType;
+      if (casaTipo) { data[casaTipo] = document.getElementById('CasaTipoConta').value; }
+      const gastosTipo = document.getElementById('gastosTipoConta').dataset.schemaType;
+      if (gastosTipo) { data[gastosTipo] = document.getElementById('gastosTipoConta').value; }
+      const lunaTipo = document.getElementById('lunaTipoConta').dataset.schemaType;
+      if (lunaTipo) { data[lunaTipo] = document.getElementById('lunaTipoConta').value; }
+      const pessoalTipo = document.getElementById('pessoalTipoConta').dataset.schemaType;
+      if (pessoalTipo) { data[pessoalTipo] = document.getElementById('pessoalTipoConta').value; }
+      
+      // Campo "subtipoconta" conforme grupo ativo
+      const formSelectorValue = document.getElementById('formSelector').value;
+      if (formSelectorValue === "Casa") {
+        data.subtipoconta = document.getElementById('CasaTipoConta').value;
+      } else if (formSelectorValue === "Gastos") {
+        data.subtipoconta = document.getElementById('gastosTipoConta').value;
+      } else if (formSelectorValue === "Luna") {
+        data.subtipoconta = document.getElementById('lunaTipoConta').value;
+      } else if (formSelectorValue === "Pessoal") {
+        data.subtipoconta = document.getElementById('pessoalTipoConta').value;
+      }
+      
+      data.formSelector = formSelectorValue;
+      
+      // Converter os campos com data-currency para números, se preenchidos
+      document.querySelectorAll('input[data-currency]').forEach(input => {
+        const fieldName = input.getAttribute("name");
+        if (fieldName) {
+          const numValue = getNumericValue(input);
+          if (numValue !== null) { data[fieldName] = numValue; }
+        }
+      });
+      
+      console.log("JSON a ser enviado:", JSON.stringify(data));
+      
+      const endpoint = "https://prod-17.brazilsouth.logic.azure.com:443/workflows/f8bb997f3f3b4a2989e39e8f834cd0c7/triggers/manual/paths/invoke?api-version=2016-06-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=Rz9dzzAs5FIdTRvUHFOFcITbn138X1z0fWhGpbgcXHQ";
+      
+      fetch(endpoint, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data)
+      })
+      .then(response => {
+        if (!response.ok) { throw new Error("Erro na rede: " + response.statusText); }
+        return response.text();
+      })
+      .then(responseText => {
+        if (!responseText) { return {}; }
+        try { return JSON.parse(responseText); }
+        catch (err) {
+          console.warn("Resposta não é JSON, mas requisição foi bem-sucedida.");
+          return {};
+        }
+      })
+      .then(responseData => {
+        var confirmModal = new bootstrap.Modal(document.getElementById('confirmModal'));
+        confirmModal.show();
+      })
+      .catch(error => {
+        console.error("Erro ao enviar os dados:", error);
+        alert("Erro ao enviar os dados. Verifique o console para mais detalhes.");
+      });
+    });
+    
+    document.getElementById('confirmModal').addEventListener('hidden.bs.modal', function () {
+      window.location.reload();
+    });
+  </script>
+</body>
+</html>
