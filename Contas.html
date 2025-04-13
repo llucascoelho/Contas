@@ -2,7 +2,6 @@
 <html lang="pt-br">
 <head>
   <meta charset="UTF-8" />
-  <!-- Meta viewport atualizado -->
   <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Controle de Contas - Modo Noturno</title>
   
@@ -32,7 +31,7 @@
       background-color: #1e1e1e;
       padding: 30px;
       border-radius: 10px;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+      box-shadow: 0 4px 15px rgba(0,0,0,0.5);
     }
     h1 {
       text-align: center;
@@ -72,7 +71,7 @@
     .date-container {
       margin-bottom: 10px;
     }
-    /* Estilo das flags */
+    /* Estilo das flags – mantendo o check centralizado */
     .flag-checkbox {
       display: inline-flex;
       align-items: center;
@@ -209,6 +208,7 @@
           </select>
         </div>
         <div class="conditional" id="casaCampos">
+          <!-- Data de vencimento -->
           <div class="date-container">
             <label for="condDataVencimento">Data de vencimento</label>
             <input type="date" id="condDataVencimento" class="form-control">
@@ -216,10 +216,12 @@
               <input type="checkbox" id="flag-condDataVencimento" class="flag-hoje"> Hoje
             </label>
           </div>
+          <!-- Valor -->
           <div class="form-group">
             <label for="condValor">Valor (R$)</label>
             <input type="text" id="condValor" data-currency placeholder="R$" class="form-control" inputmode="decimal">
           </div>
+          <!-- Data de pagamento com flags -->
           <div class="date-container">
             <label for="condDataPagamento">Data de pagamento</label>
             <input type="date" id="condDataPagamento" class="form-control">
@@ -227,16 +229,15 @@
               <input type="checkbox" id="flag-condDataPagamento" class="flag-hoje"> Hoje
             </label>
             <br>
-            <!-- Flag: Pagamento na data de vencimento -->
             <label for="flag-condPgtoDataVenc" class="flag-checkbox">
               <input type="checkbox" id="flag-condPgtoDataVenc" class="flag-hoje"> Pagamento na data de vencimento
             </label>
           </div>
+          <!-- Valor de pagamento com flag -->
           <div class="form-group">
             <label for="condValorPagamento">Valor de pagamento (R$)</label>
             <input type="text" id="condValorPagamento" data-currency placeholder="R$" class="form-control" inputmode="decimal">
             <br>
-            <!-- Flag: Valor total -->
             <label for="flag-valorTotal" class="flag-checkbox">
               <input type="checkbox" id="flag-valorTotal" class="flag-hoje"> Valor total
             </label>
@@ -361,7 +362,7 @@
         </div>
       </fieldset>
       
-      <!-- Botão centralizado -->
+      <!-- Botão de envio centralizado -->
       <div class="text-center">
         <button type="submit" class="btn btn-primary">Enviar</button>
       </div>
@@ -542,7 +543,7 @@
       }
     });
     
-    // Flag "Hoje" para campos de data (os checkboxes agora deixam o check visível)
+    // Flag "Hoje" para campos de data – os checkboxes mantêm o check centralizado
     document.querySelectorAll('.flag-hoje').forEach(flag => {
       flag.addEventListener('change', function() {
         const container = this.closest('.date-container');
@@ -590,7 +591,6 @@
     // Envio dos dados para o Power Automate
     document.getElementById('contasForm').addEventListener('submit', function(event) {
       event.preventDefault();
-      
       const form = this;
       const formData = new FormData(form);
       let data = {};
@@ -620,7 +620,7 @@
       
       data.formSelector = formSelectorValue;
       
-      // Converter os campos com data-currency para números, se preenchidos
+      // Converter os campos com data-currency para números
       document.querySelectorAll('input[data-currency]').forEach(input => {
         const fieldName = input.getAttribute("name");
         if (fieldName) {
@@ -660,6 +660,7 @@
       });
     });
     
+    // Ao fechar a modal, recarregar a página para retornar ao estado inicial
     document.getElementById('confirmModal').addEventListener('hidden.bs.modal', function () {
       window.location.reload();
     });
