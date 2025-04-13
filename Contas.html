@@ -48,7 +48,6 @@
       font-weight: 500;
       color: #ffffff;
     }
-    /* Uso das classes Bootstrap para selects e inputs */
     select.form-select,
     input.form-control {
       width: 100%;
@@ -71,7 +70,6 @@
     .date-container {
       margin-bottom: 10px;
     }
-    /* Estilo das flags – mantendo o check centralizado */
     .flag-checkbox {
       display: inline-flex;
       align-items: center;
@@ -163,7 +161,7 @@
         font-size: 24px;
       }
     }
-    /* Modal padrão (mantendo as cores do modo noturno) */
+    /* Modal padrão (modo noturno) */
     .modal-content {
       background-color: #1e1e1e;
       color: #e0e0e0;
@@ -208,7 +206,6 @@
           </select>
         </div>
         <div class="conditional" id="casaCampos">
-          <!-- Data de vencimento -->
           <div class="date-container">
             <label for="condDataVencimento">Data de vencimento</label>
             <input type="date" id="condDataVencimento" class="form-control">
@@ -216,12 +213,10 @@
               <input type="checkbox" id="flag-condDataVencimento" class="flag-hoje"> Hoje
             </label>
           </div>
-          <!-- Valor -->
           <div class="form-group">
             <label for="condValor">Valor (R$)</label>
             <input type="text" id="condValor" data-currency placeholder="R$" class="form-control" inputmode="decimal">
           </div>
-          <!-- Data de pagamento com flags -->
           <div class="date-container">
             <label for="condDataPagamento">Data de pagamento</label>
             <input type="date" id="condDataPagamento" class="form-control">
@@ -229,15 +224,16 @@
               <input type="checkbox" id="flag-condDataPagamento" class="flag-hoje"> Hoje
             </label>
             <br>
+            <!-- Flag: Pagamento na data de vencimento -->
             <label for="flag-condPgtoDataVenc" class="flag-checkbox">
               <input type="checkbox" id="flag-condPgtoDataVenc" class="flag-hoje"> Pagamento na data de vencimento
             </label>
           </div>
-          <!-- Valor de pagamento com flag -->
           <div class="form-group">
             <label for="condValorPagamento">Valor de pagamento (R$)</label>
             <input type="text" id="condValorPagamento" data-currency placeholder="R$" class="form-control" inputmode="decimal">
             <br>
+            <!-- Flag: Valor total -->
             <label for="flag-valorTotal" class="flag-checkbox">
               <input type="checkbox" id="flag-valorTotal" class="flag-hoje"> Valor total
             </label>
@@ -362,7 +358,6 @@
         </div>
       </fieldset>
       
-      <!-- Botão de envio centralizado -->
       <div class="text-center">
         <button type="submit" class="btn btn-primary">Enviar</button>
       </div>
@@ -543,7 +538,7 @@
       }
     });
     
-    // Flag "Hoje" para campos de data – os checkboxes mantêm o check centralizado
+    // Flag "Hoje" para campos de data – mantém o check visível (não desmarca)
     document.querySelectorAll('.flag-hoje').forEach(flag => {
       flag.addEventListener('change', function() {
         const container = this.closest('.date-container');
@@ -596,7 +591,6 @@
       let data = {};
       formData.forEach((value, key) => { data[key] = value; });
       
-      // Adiciona os campos de tipo a partir dos datasets
       const casaTipo = document.getElementById('CasaTipoConta').dataset.schemaType;
       if (casaTipo) { data[casaTipo] = document.getElementById('CasaTipoConta').value; }
       const gastosTipo = document.getElementById('gastosTipoConta').dataset.schemaType;
@@ -606,7 +600,7 @@
       const pessoalTipo = document.getElementById('pessoalTipoConta').dataset.schemaType;
       if (pessoalTipo) { data[pessoalTipo] = document.getElementById('pessoalTipoConta').value; }
       
-      // Campo "subtipoconta" conforme grupo ativo
+      // Campo "subtipoconta" conforme o grupo ativo
       const formSelectorValue = document.getElementById('formSelector').value;
       if (formSelectorValue === "Casa") {
         data.subtipoconta = document.getElementById('CasaTipoConta').value;
@@ -620,7 +614,7 @@
       
       data.formSelector = formSelectorValue;
       
-      // Converter os campos com data-currency para números
+      // Converter os campos com data-currency para números, se preenchidos
       document.querySelectorAll('input[data-currency]').forEach(input => {
         const fieldName = input.getAttribute("name");
         if (fieldName) {
@@ -660,9 +654,14 @@
       });
     });
     
-    // Ao fechar a modal, recarregar a página para retornar ao estado inicial
     document.getElementById('confirmModal').addEventListener('hidden.bs.modal', function () {
       window.location.reload();
+    });
+    
+    // Adicionar script para que, ao pressionar o botão Voltar (Android), volte para a página de menu
+    window.history.pushState(null, null, window.location.href);
+    window.addEventListener('popstate', function(event) {
+      window.location.href = 'menu.html'; // Substitua "menu.html" pelo caminho da sua página de menu
     });
   </script>
 </body>
