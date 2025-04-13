@@ -2,6 +2,7 @@
 <html lang="pt-br">
 <head>
   <meta charset="UTF-8" />
+  <!-- Meta viewport atualizado -->
   <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Controle de Contas - Modo Noturno</title>
   
@@ -31,7 +32,7 @@
       background-color: #1e1e1e;
       padding: 30px;
       border-radius: 10px;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
     }
     h1 {
       text-align: center;
@@ -48,6 +49,7 @@
       font-weight: 500;
       color: #ffffff;
     }
+    /* Uso das classes Bootstrap para selects e inputs */
     select.form-select,
     input.form-control {
       width: 100%;
@@ -70,6 +72,7 @@
     .date-container {
       margin-bottom: 10px;
     }
+    /* Estilo das flags */
     .flag-checkbox {
       display: inline-flex;
       align-items: center;
@@ -161,7 +164,7 @@
         font-size: 24px;
       }
     }
-    /* Modal padrão (modo noturno) */
+    /* Modal padrão (mantendo as cores do modo noturno) */
     .modal-content {
       background-color: #1e1e1e;
       color: #e0e0e0;
@@ -358,6 +361,7 @@
         </div>
       </fieldset>
       
+      <!-- Botão centralizado -->
       <div class="text-center">
         <button type="submit" class="btn btn-primary">Enviar</button>
       </div>
@@ -538,7 +542,7 @@
       }
     });
     
-    // Flag "Hoje" para campos de data – mantém o check visível (não desmarca)
+    // Flag "Hoje" para campos de data (os checkboxes agora deixam o check visível)
     document.querySelectorAll('.flag-hoje').forEach(flag => {
       flag.addEventListener('change', function() {
         const container = this.closest('.date-container');
@@ -586,11 +590,13 @@
     // Envio dos dados para o Power Automate
     document.getElementById('contasForm').addEventListener('submit', function(event) {
       event.preventDefault();
+      
       const form = this;
       const formData = new FormData(form);
       let data = {};
       formData.forEach((value, key) => { data[key] = value; });
       
+      // Adiciona os campos de tipo a partir dos datasets
       const casaTipo = document.getElementById('CasaTipoConta').dataset.schemaType;
       if (casaTipo) { data[casaTipo] = document.getElementById('CasaTipoConta').value; }
       const gastosTipo = document.getElementById('gastosTipoConta').dataset.schemaType;
@@ -600,7 +606,7 @@
       const pessoalTipo = document.getElementById('pessoalTipoConta').dataset.schemaType;
       if (pessoalTipo) { data[pessoalTipo] = document.getElementById('pessoalTipoConta').value; }
       
-      // Campo "subtipoconta" conforme o grupo ativo
+      // Campo "subtipoconta" conforme grupo ativo
       const formSelectorValue = document.getElementById('formSelector').value;
       if (formSelectorValue === "Casa") {
         data.subtipoconta = document.getElementById('CasaTipoConta').value;
@@ -656,12 +662,6 @@
     
     document.getElementById('confirmModal').addEventListener('hidden.bs.modal', function () {
       window.location.reload();
-    });
-    
-    // Adicionar script para que, ao pressionar o botão Voltar (Android), volte para a página de menu
-    window.history.pushState(null, null, window.location.href);
-    window.addEventListener('popstate', function(event) {
-      window.location.href = 'menu.html'; // Substitua "menu.html" pelo caminho da sua página de menu
     });
   </script>
 </body>
