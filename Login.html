@@ -125,9 +125,9 @@
         } else {
           msg.textContent = "Usuário ou senha incorretos.";
         }
-        catch (err) {
-        msg.textContent = "Erro: " + err.message;
-         console.error(err);
+      } catch (err) {
+         msg.textContent = "Erro: " + err.message;
+          console.error(err);
         }
     }
   </script>
