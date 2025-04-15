@@ -3,17 +3,27 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Login - Controle de Contas</title>
+  <title>Login</title>
   <style>
     body {
-      background-color: #121212;
-      color: #ffffff;
+      margin: 0;
+      padding: 0;
       font-family: 'Roboto', sans-serif;
+      background: url("https://llucascoelho.github.io/Contas/Teladefundo.png") no-repeat center center fixed;
+      background-size: cover;
       display: flex;
       justify-content: center;
       align-items: center;
-      height: 100vh;
-      margin: 0;
+      min-height: 100vh;
+      position: relative;
+    }
+
+    body::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.6);
+      z-index: 0;
     }
 
     .login-box {
@@ -23,38 +33,50 @@
       width: 100%;
       max-width: 380px;
       box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5);
+      position: relative;
+      z-index: 1;
+      color: white;
+      box-sizing: border-box;
+    }
+
+    .logo {
+      width: 100px;
+      height: auto;
+      margin: 0 auto;
+      display: block;
     }
 
     .login-box h2 {
-      margin-bottom: 25px;
-      font-weight: 500;
       text-align: center;
+      margin-bottom: 20px;
+      margin-top: 0px;
+      font-size: 1.8rem;
+      font-weight: 500;
+    }
+
+    input, button {
+      width: 100%;
+      padding: 12px;
+      margin-bottom: 15px;
+      border-radius: 8px;
+      border: none;
+      font-size: 1rem;
+      box-sizing: border-box;
     }
 
     input {
       background-color: #2a2a2a;
       color: #fff;
-      border: none;
-      border-radius: 8px;
-      padding: 12px;
-      margin-bottom: 15px;
-      width: 100%;
-      font-size: 1rem;
     }
 
     input::placeholder {
-      color: #bbbbbb;
+      color: #bbb;
     }
 
     button {
-      width: 100%;
-      padding: 12px;
       background-color: #4162AB;
-      border: none;
-      border-radius: 8px;
       color: white;
       font-weight: 500;
-      font-size: 1rem;
       cursor: pointer;
     }
 
@@ -63,20 +85,38 @@
     }
 
     .message {
-      text-align: center;
-      margin-top: 15px;
       font-size: 0.9rem;
+      text-align: center;
+    }
+
+    @media (max-width: 480px) {
+      .login-box {
+        padding: 30px 20px;
+        border-radius: 10px;
+      }
+
+      .login-box h2 {
+        font-size: 1.5rem;
+      }
+
+      .logo {
+        width: 80px;
+        margin-bottom: 15px;
+      }
     }
   </style>
 </head>
 <body>
 
   <div class="login-box">
+    <!-- ✅ LOGO -->
+    <img src="https://llucascoelho.github.io/Contas/logosemfundo.png" alt="Logo" class="logo" />
+
     <h2>Entrar</h2>
     <input type="text" id="username" placeholder="Usuário" required />
     <input type="password" id="password" placeholder="Senha" required />
     <button onclick="login()">Entrar</button>
-    <div id="message" class="message"></div>
+    <div class="message" id="message"></div>
   </div>
 
   <script>
@@ -98,7 +138,7 @@
         const resultado = await response.text();
 
         if (resultado === "ok") {
-          window.location.href = "Transição.html"; // ✅ redireciona para a tela de transição
+          window.location.href = "Transicao.html";
         } else {
           msg.textContent = "Usuário ou senha incorretos.";
           msg.style.color = "#f44336";
