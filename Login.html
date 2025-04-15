@@ -116,9 +116,17 @@
 
       const url = `https://script.google.com/macros/s/AKfycbyCkXBcVPwj1C8NyssKaggthISfKGoJJMhDSHXC05h4X4gwKtxeG-CHE5R8gmnw37Ib/exec?usuario=${encodeURIComponent(user)}&senha=${encodeURIComponent(pass)}`;
 
+      msg.textContent = "Verificando...";
+
       try {
         const res = await fetch(url);
+
+        if (!res.ok) {
+          throw new Error(`Erro HTTP ${res.status}: ${res.statusText}`);
+        }
+
         const result = await res.text();
+
         if (result === "ok") {
           localStorage.setItem("usuarioLogado", user);
           window.location.href = "Transiçao.html";
@@ -126,7 +134,8 @@
           msg.textContent = "Usuário ou senha incorretos.";
         }
       } catch (err) {
-        msg.textContent = "Erro ao conectar.";
+        msg.textContent = "Erro: " + err.message;
+        console.error("Erro ao conectar:", err);
       }
     }
   </script>
