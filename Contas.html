@@ -13,42 +13,65 @@
         integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
   
   <style>
-    /* Reset e configurações principais (modo noturno) */
+    /* Reset básico */
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
     }
+    
+    /* Background e alinhamento semelhante às páginas de Login e Menu */
     body {
       font-family: 'Roboto', sans-serif;
-      background-color: #121212;
-      color: #e0e0e0;
-      padding: 30px;
+      background: url("https://llucascoelho.github.io/Contas/Teladefundo.png") no-repeat center center fixed;
+      background-size: cover;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: relative;
     }
+    
+    body::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.6);
+      z-index: 0;
+    }
+    
+    /* Container atualizado – inspirado nas páginas de Login e Menu */
     .container {
+      position: relative;
+      z-index: 1;
+      background-color: rgba(30, 30, 30, 0.95);
+      padding: 40px 30px;
+      border-radius: 16px;
       max-width: 800px;
-      margin: 0 auto;
-      background-color: #1e1e1e;
-      padding: 30px;
-      border-radius: 10px;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+      width: 90%;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+      animation: fadeIn 0.8s ease-out;
     }
+    
     h1 {
       text-align: center;
       margin-bottom: 20px;
       font-weight: 500;
       color: #ffffff;
     }
+    
     .form-group {
       margin-bottom: 20px;
     }
+    
     label {
       display: block;
       margin-bottom: 8px;
       font-weight: 500;
       color: #ffffff;
     }
-    /* Uso das classes Bootstrap para selects e inputs */
+    
+    /* Estilização dos selects e inputs – mantendo o padrão de cores e formatos */
     select.form-select,
     input.form-control {
       width: 100%;
@@ -68,9 +91,11 @@
       background-color: #2a2a2a;
       color: #ffffff;
     }
+    
     .date-container {
       margin-bottom: 10px;
     }
+    
     /* Estilo das flags – mantendo o check centralizado */
     .flag-checkbox {
       display: inline-flex;
@@ -102,6 +127,7 @@
       font-size: 14px;
       color: #fff;
     }
+    
     fieldset {
       display: none;
       border: 1px solid #444;
@@ -163,9 +189,10 @@
         font-size: 24px;
       }
     }
-    /* Modal padrão (mantendo as cores do modo noturno) */
+    
+    /* Modal (mantendo a harmonia com o design) */
     .modal-content {
-      background-color: #1e1e1e;
+      background-color: rgba(30, 30, 30, 0.95);
       color: #e0e0e0;
     }
     .modal-header, .modal-footer {
@@ -179,15 +206,10 @@
 <body>
   <div class="container">
     <div class="text-center" style="margin-bottom: 25px;">
-      <button type="button" onclick="window.location.href='Menu.html'"
-              style="background-color: transparent; border: 1px solid #6200ea; color: #6200ea; 
-                     padding: 10px 20px; font-size: 16px; border-radius: 6px; cursor: pointer;
-                     transition: background-color 0.3s;">
+      <button type="button" onclick="window.location.href='Menu.html'" style="background-color: transparent; border: 1px solid #6200ea; color: #6200ea; padding: 10px 20px; font-size: 16px; border-radius: 6px; cursor: pointer; transition: background-color 0.3s;">
         ⬅ Voltar ao Menu
       </button>
     </div>    
-    
-    <form id="contasForm" action="#" method="post">
     
     <form id="contasForm" action="#" method="post">
       <h1>Controle de Contas</h1>
@@ -356,7 +378,6 @@
               <input type="checkbox" id="flag-ccDataPagamento" class="flag-hoje"> Hoje
             </label>
             <br>
-            <!-- Flag: Pagamento na data de vencimento (Pessoal) -->
             <label for="flag-ccPgtoDataVenc" class="flag-checkbox">
               <input type="checkbox" id="flag-ccPgtoDataVenc" class="flag-hoje"> Pagamento na data de vencimento
             </label>
@@ -365,7 +386,6 @@
             <label for="ccValorPagamento">Valor de pagamento (R$)</label>
             <input type="text" id="ccValorPagamento" data-currency placeholder="R$" class="form-control" inputmode="decimal">
             <br>
-            <!-- Flag: Valor total (Pessoal) -->
             <label for="flag-ccValorTotal" class="flag-checkbox">
               <input type="checkbox" id="flag-ccValorTotal" class="flag-hoje"> Valor total
             </label>
@@ -384,14 +404,14 @@
   <div class="modal fade" id="confirmModal" tabindex="-1" aria-labelledby="confirmModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
-        <div class="modal-header" style="background-color: #1e1e1e; border-bottom: 1px solid #444;">
+        <div class="modal-header" style="background-color: rgba(30,30,30,0.95); border-bottom: 1px solid #444;">
           <h5 class="modal-title" id="confirmModalLabel">Confirmação de Envio</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar" style="filter: invert(1);"></button>
         </div>
-        <div class="modal-body" style="background-color: #1e1e1e;">
+        <div class="modal-body" style="background-color: rgba(30,30,30,0.95);">
           <p class="mb-0">Seus dados foram enviados com sucesso!</p>
         </div>
-        <div class="modal-footer" style="background-color: #1e1e1e; border-top: 1px solid #444;">
+        <div class="modal-footer" style="background-color: rgba(30,30,30,0.95); border-top: 1px solid #444;">
           <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Fechar</button>
         </div>
       </div>
