@@ -133,7 +133,6 @@
         const result = await res.text();
 
         if (result === "ok") {
-          localStorage.setItem("usuarioLogado", user);
           window.location.href = "Transiçao.html";
         } else {
           msg.textContent = "Usuário ou senha incorretos.";
