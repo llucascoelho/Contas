@@ -53,8 +53,8 @@
 
     input, button {
       width: 100%;
-      padding: 12px;
-      margin-bottom: 15px;
+      padding: 14px;
+      margin-bottom: 18px;
       border-radius: 8px;
       border: none;
       font-size: 1rem;
@@ -84,6 +84,9 @@
     .message {
       font-size: 0.9rem;
       color: #f44336;
+      margin-top: -10px;
+      margin-bottom: 10px;
+      text-align: center;
     }
 
     @keyframes fadeIn {
@@ -97,8 +100,10 @@
   <div class="container">
     <img src="https://llucascoelho.github.io/Contas/logosemfundo.png" class="logo" alt="Logo" />
     <h2>Entrar</h2>
-    <input type="text" id="username" placeholder="Usuário" />
-    <input type="password" id="password" placeholder="Senha" />
+    <input type="text" id="username" placeholder="Usuário" 
+           autocapitalize="none" autocomplete="username" autocorrect="off" />
+    <input type="password" id="password" placeholder="Senha" 
+           autocomplete="current-password" autocorrect="off" />
     <button onclick="login()">Entrar</button>
     <div class="message" id="message"></div>
   </div>
