@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login - Controle de Contas</title>
+  <style>
+    body {
+      background-color: #121212;
+      color: #ffffff;
+      font-family: 'Roboto', sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    .login-box {
+      background-color: #1e1e1e;
+      padding: 40px 30px;
+      border-radius: 12px;
+      width: 100%;
+      max-width: 380px;
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5);
+    }
+
+    .login-box h2 {
+      margin-bottom: 25px;
+      font-weight: 500;
+      text-align: center;
+    }
+
+    input {
+      background-color: #2a2a2a;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      padding: 12px;
+      margin-bottom: 15px;
+      width: 100%;
+      font-size: 1rem;
+    }
+
+    input::placeholder {
+      color: #bbbbbb;
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      background-color: #4162AB;
+      border: none;
+      border-radius: 8px;
+      color: white;
+      font-weight: 500;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #2E5290;
+    }
+
+    .message {
+      text-align: center;
+      margin-top: 15px;
+      font-size: 0.9rem;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="login-box">
+    <h2>Entrar</h2>
+    <input type="text" id="username" placeholder="Usuário" required />
+    <input type="password" id="password" placeholder="Senha" required />
+    <button onclick="login()">Entrar</button>
+    <div id="message" class="message"></div>
+  </div>
+
+  <script>
+    async function login() {
+      const user = document.getElementById("username").value.trim();
+      const pass = document.getElementById("password").value.trim();
+      const msg = document.getElementById("message");
+
+      if (!user || !pass) {
+        msg.textContent = "Preencha usuário e senha.";
+        msg.style.color = "#f44336";
+        return;
+      }
+
+      const url = `https://script.google.com/macros/s/AKfycbyCkXBcVPwj1C8NyssKaggthISfKGoJJMhDSHXC05h4X4gwKtxeG-CHE5R8gmnw37Ib/exec?usuario=${encodeURIComponent(user)}&senha=${encodeURIComponent(pass)}`;
+
+      try {
+        const response = await fetch(url);
+        const resultado = await response.text();
+
+        if (resultado === "ok") {
+          window.location.href = "Transição.html"; // ✅ redireciona para a tela de transição
+        } else {
+          msg.textContent = "Usuário ou senha incorretos.";
+          msg.style.color = "#f44336";
+        }
+      } catch (error) {
+        msg.textContent = "Erro ao conectar com o servidor.";
+        msg.style.color = "#e57373";
+        console.error(error);
+      }
+    }
+  </script>
+
+</body>
+</html>
