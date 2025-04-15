@@ -57,15 +57,25 @@
 
     .toggle-password {
       position: absolute;
-      right: 12px;
       top: 50%;
+      right: 12px;
       transform: translateY(-50%);
       background: none;
       border: none;
-      color: #bbb;
-      font-size: 1.2rem;
-      cursor: pointer;
       padding: 0;
+      margin: 0;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+      width: 24px;
+    }
+
+    .toggle-password svg {
+      width: 20px;
+      height: 20px;
+      fill: #bbb;
     }
 
     input, button {
@@ -118,14 +128,22 @@
     <img src="https://llucascoelho.github.io/Contas/logosemfundo.png" class="logo" alt="Logo" />
     <h2>Entrar</h2>
 
+    <!-- Campo de usuário -->
     <input type="text" id="username" placeholder="Usuário"
            autocomplete="username" autocorrect="off" autocapitalize="sentences" />
 
+    <!-- Campo de senha com botão de mostrar/ocultar -->
     <div class="input-group">
       <input type="password" id="password" placeholder="Senha"
              inputmode="numeric" pattern="[0-9]*"
              autocomplete="current-password" autocorrect="off" />
-      <button class="toggle-password" type="button" onclick="togglePassword(this)">👁️</button>
+      <button class="toggle-password" type="button" onclick="togglePassword(this)">
+        <svg id="eyeIcon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+          <path d="M12 5c-7 0-11 7-11 7s4 7 11 7 11-7 11-7-4-7-11-7zm0 12
+                   c-2.8 0-5-2.2-5-5s2.2-5 5-5 5 2.2 5 5-2.2 5-5 5zm0-8a3 3
+                   0 100 6 3 3 0 000-6z"/>
+        </svg>
+      </button>
     </div>
 
     <button onclick="login()">Entrar</button>
@@ -133,17 +151,24 @@
   </div>
 
   <script>
-    function togglePassword(button) {
-      const senhaInput = document.getElementById("password");
-      const tipo = senhaInput.getAttribute("type");
+    let senhaVisivel = false;
 
-      if (tipo === "password") {
-        senhaInput.setAttribute("type", "text");
-        button.textContent = "🙈"; // ícone diferente
+    function togglePassword(btn) {
+      const senhaInput = document.getElementById("password");
+      const eyeIcon = document.getElementById("eyeIcon");
+
+      if (senhaVisivel) {
+        senhaInput.type = "password";
+        eyeIcon.innerHTML = '<path d="M12 5c-7 0-11 7-11 7s4 7 11 7 11-7 11-7-4-7-11-7zm0 12\
+        c-2.8 0-5-2.2-5-5s2.2-5 5-5 5 2.2 5 5-2.2 5-5 5zm0-8a3 3 0 100 6 3 3 0 000-6z"/>';
       } else {
-        senhaInput.setAttribute("type", "password");
-        button.textContent = "👁️";
+        senhaInput.type = "text";
+        eyeIcon.innerHTML = '<path d="M12 5c-7 0-11 7-11 7s4 7 11 7c1.7 0 3.3-.4 4.8-1.1l2.1\
+        2.1 1.4-1.4-18-18-1.4 1.4 2.1 2.1C5.3 6.7 3.9 8.6 3 12c1.2 3.9 5 7 9 7\
+        1.4 0 2.7-.3 3.9-.8l2.1 2.1 1.4-1.4-18-18-1.4 1.4 2.1 2.1z"/>';
       }
+
+      senhaVisivel = !senhaVisivel;
     }
 
     async function login() {
@@ -162,13 +187,9 @@
 
       try {
         const res = await fetch(url);
-
-        if (!res.ok) {
-          throw new Error(`Erro HTTP ${res.status}: ${res.statusText}`);
-        }
+        if (!res.ok) throw new Error(`Erro HTTP ${res.status}: ${res.statusText}`);
 
         const result = await res.text();
-
         if (result === "ok") {
           window.location.href = "Transiçao.html";
         } else {
