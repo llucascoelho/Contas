@@ -4,17 +4,44 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>Redirecionando...</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+
   <style>
     body {
-      background-color: #121212;
-      color: white;
+      margin: 0;
       font-family: 'Roboto', sans-serif;
+      background: url("https://llucascoelho.github.io/Contas/Teladefundo.png") no-repeat center center fixed;
+      background-size: cover;
       display: flex;
       justify-content: center;
       align-items: center;
-      height: 100vh;
-      margin: 0;
-      flex-direction: column;
+      min-height: 100vh;
+      position: relative;
+    }
+
+    body::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.6);
+      z-index: 0;
+    }
+
+    .transicao-box {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      background-color: rgba(30, 30, 30, 0.95);
+      padding: 40px 30px;
+      border-radius: 16px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+      animation: fadeIn 0.8s ease-out;
+    }
+
+    .logo {
+      width: 90px;
+      margin-bottom: 20px;
     }
 
     .spinner {
@@ -24,28 +51,51 @@
       border-top: 6px solid #99D1F2;
       border-radius: 50%;
       animation: spin 1s linear infinite;
-      margin-bottom: 20px;
+      margin: 0 auto 20px;
+    }
+
+    h2 {
+      color: #ccc;
+      font-weight: 400;
+      font-size: 1.2rem;
     }
 
     @keyframes spin {
       to { transform: rotate(360deg); }
     }
 
-    h2 {
-      font-weight: 400;
-      color: #cccccc;
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 480px) {
+      .transicao-box {
+        padding: 30px 20px;
+      }
+
+      .logo {
+        width: 70px;
+      }
+
+      h2 {
+        font-size: 1rem;
+      }
     }
   </style>
 </head>
 <body>
 
-  <div class="spinner"></div>
-  <h2>Aguarde...</h2>
+  <div class="transicao-box">
+    <img src="https://llucascoelho.github.io/Contas/logosemfundo.png" class="logo" alt="Logo" />
+    <div class="spinner"></div>
+    <h2>Aguarde, estamos redirecionando...</h2>
+  </div>
 
   <script>
     setTimeout(() => {
       window.location.href = "Menu.html";
-    }, 2000); // 1 segundos
+    }, 2000);
   </script>
 
 </body>

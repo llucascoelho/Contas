@@ -4,17 +4,19 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>Login</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet" />
+
   <style>
     body {
       margin: 0;
-      padding: 0;
       font-family: 'Roboto', sans-serif;
       background: url("https://llucascoelho.github.io/Contas/Teladefundo.png") no-repeat center center fixed;
       background-size: cover;
+      min-height: 100vh;
       display: flex;
       justify-content: center;
       align-items: center;
-      min-height: 100vh;
       position: relative;
     }
 
@@ -26,32 +28,27 @@
       z-index: 0;
     }
 
-    .login-box {
-      background-color: #1e1e1e;
-      padding: 40px 30px;
-      border-radius: 12px;
-      width: 100%;
-      max-width: 380px;
-      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5);
+    .container {
       position: relative;
       z-index: 1;
-      color: white;
-      box-sizing: border-box;
+      background-color: rgba(30, 30, 30, 0.95);
+      padding: 40px 30px;
+      border-radius: 16px;
+      max-width: 380px;
+      width: 90%;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+      text-align: center;
+      animation: fadeIn 0.8s ease-out;
     }
 
     .logo {
-      width: 100px;
-      height: auto;
-      margin: 0 auto;
-      display: block;
+      width: 90px;
+      margin-bottom: 10px;
     }
 
-    .login-box h2 {
-      text-align: center;
+    h2 {
+      color: white;
       margin-bottom: 20px;
-      margin-top: 0px;
-      font-size: 1.8rem;
-      font-weight: 500;
     }
 
     input, button {
@@ -86,35 +83,22 @@
 
     .message {
       font-size: 0.9rem;
-      text-align: center;
+      color: #f44336;
     }
 
-    @media (max-width: 480px) {
-      .login-box {
-        padding: 30px 20px;
-        border-radius: 10px;
-      }
-
-      .login-box h2 {
-        font-size: 1.5rem;
-      }
-
-      .logo {
-        width: 80px;
-        margin-bottom: 15px;
-      }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
     }
   </style>
 </head>
 <body>
 
-  <div class="login-box">
-    <!-- ✅ LOGO -->
-    <img src="https://llucascoelho.github.io/Contas/logosemfundo.png" alt="Logo" class="logo" />
-
+  <div class="container">
+    <img src="https://llucascoelho.github.io/Contas/logosemfundo.png" class="logo" alt="Logo" />
     <h2>Entrar</h2>
-    <input type="text" id="username" placeholder="Usuário" required />
-    <input type="password" id="password" placeholder="Senha" required />
+    <input type="text" id="username" placeholder="Usuário" />
+    <input type="password" id="password" placeholder="Senha" />
     <button onclick="login()">Entrar</button>
     <div class="message" id="message"></div>
   </div>
@@ -127,26 +111,22 @@
 
       if (!user || !pass) {
         msg.textContent = "Preencha usuário e senha.";
-        msg.style.color = "#f44336";
         return;
       }
 
       const url = `https://script.google.com/macros/s/AKfycbyCkXBcVPwj1C8NyssKaggthISfKGoJJMhDSHXC05h4X4gwKtxeG-CHE5R8gmnw37Ib/exec?usuario=${encodeURIComponent(user)}&senha=${encodeURIComponent(pass)}`;
 
       try {
-        const response = await fetch(url);
-        const resultado = await response.text();
-
-        if (resultado === "ok") {
+        const res = await fetch(url);
+        const result = await res.text();
+        if (result === "ok") {
+          localStorage.setItem("usuarioLogado", user);
           window.location.href = "Transiçao.html";
         } else {
           msg.textContent = "Usuário ou senha incorretos.";
-          msg.style.color = "#f44336";
         }
-      } catch (error) {
-        msg.textContent = "Erro ao conectar com o servidor.";
-        msg.style.color = "#e57373";
-        console.error(error);
+      } catch (err) {
+        msg.textContent = "Erro ao conectar.";
       }
     }
   </script>
