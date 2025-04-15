@@ -51,6 +51,22 @@
       margin-bottom: 20px;
     }
 
+    .input-group {
+      position: relative;
+    }
+
+    .toggle-password {
+      position: absolute;
+      right: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      color: #aaa;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+
     input, button {
       width: 100%;
       padding: 14px;
@@ -100,15 +116,28 @@
   <div class="container">
     <img src="https://llucascoelho.github.io/Contas/logosemfundo.png" class="logo" alt="Logo" />
     <h2>Entrar</h2>
+
     <input type="text" id="username" placeholder="Usuário"
            autocomplete="username" autocorrect="off" />
-    <input type="password" id="password" placeholder="Senha"
-           autocomplete="current-password" autocorrect="off" />
+
+    <div class="input-group">
+      <input type="password" id="password" placeholder="Senha"
+             inputmode="numeric" pattern="[0-9]*"
+             autocomplete="current-password" autocorrect="off" />
+      <button class="toggle-password" type="button" onclick="togglePassword()">👁️</button>
+    </div>
+
     <button onclick="login()">Entrar</button>
     <div class="message" id="message"></div>
   </div>
 
   <script>
+    function togglePassword() {
+      const senhaInput = document.getElementById("password");
+      const tipo = senhaInput.getAttribute("type");
+      senhaInput.setAttribute("type", tipo === "password" ? "text" : "password");
+    }
+
     async function login() {
       const user = document.getElementById("username").value.trim();
       const pass = document.getElementById("password").value.trim();
