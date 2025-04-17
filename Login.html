@@ -51,33 +51,6 @@
       margin-bottom: 20px;
     }
 
-    .input-group {
-      position: relative;
-    }
-
-    .toggle-password {
-      position: absolute;
-      top: 50%;
-      right: 12px;
-      transform: translateY(-50%);
-      background: none;
-      border: none;
-      padding: 0;
-      margin: 0;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      height: 100%;
-      width: 24px;
-    }
-
-    .toggle-password svg {
-      width: 20px;
-      height: 20px;
-      fill: #bbb;
-    }
-
     input, button {
       width: 100%;
       padding: 14px;
@@ -97,6 +70,38 @@
       color: #bbb;
     }
 
+    .input-wrapper {
+      position: relative;
+      margin-bottom: 18px;
+    }
+
+    .input-wrapper input {
+      padding-right: 42px;
+    }
+
+    .toggle-password {
+      position: absolute;
+      top: 25px;
+      right: 12px;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      padding: 0;
+      margin: 0;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 24px;
+      height: 24px;
+    }
+
+    .toggle-password svg {
+      width: 20px;
+      height: 20px;
+      fill: #bbb;
+    }
+
     button {
       background-color: #4162AB;
       color: white;
@@ -110,10 +115,14 @@
 
     .message {
       font-size: 0.9rem;
-      color: #f44336;
       margin-top: -10px;
       margin-bottom: 10px;
       text-align: center;
+      color: #f44336; /* padrão: erro */
+    }
+
+    .message.success {
+      color: #80ffb0; /* verde claro para 'Verificando...' */
     }
 
     @keyframes fadeIn {
@@ -128,16 +137,14 @@
     <img src="https://llucascoelho.github.io/Contas/logosemfundo.png" class="logo" alt="Logo" />
     <h2>Entrar</h2>
 
-    <!-- Campo de usuário -->
     <input type="text" id="username" placeholder="Usuário"
            autocomplete="username" autocorrect="off" autocapitalize="sentences" />
 
-    <!-- Campo de senha com botão de mostrar/ocultar -->
-    <div class="input-group">
+    <div class="input-wrapper">
       <input type="password" id="password" placeholder="Senha"
              inputmode="numeric" pattern="[0-9]*"
              autocomplete="current-password" autocorrect="off" />
-      <button class="toggle-password" type="button" onclick="togglePassword(this)">
+      <button type="button" class="toggle-password" onclick="togglePassword(this)" aria-label="Exibir senha">
         <svg id="eyeIcon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
           <path d="M12 5c-7 0-11 7-11 7s4 7 11 7 11-7 11-7-4-7-11-7zm0 12
                    c-2.8 0-5-2.2-5-5s2.2-5 5-5 5 2.2 5 5-2.2 5-5 5zm0-8a3 3
@@ -176,14 +183,17 @@
       const pass = document.getElementById("password").value.trim();
       const msg = document.getElementById("message");
 
+      msg.classList.remove("success");
+
       if (!user || !pass) {
         msg.textContent = "Preencha usuário e senha.";
         return;
       }
 
-      const url = `https://script.google.com/macros/s/AKfycbyCkXBcVPwj1C8NyssKaggthISfKGoJJMhDSHXC05h4X4gwKtxeG-CHE5R8gmnw37Ib/exec?usuario=${encodeURIComponent(user)}&senha=${encodeURIComponent(pass)}`;
-
       msg.textContent = "Verificando...";
+      msg.classList.add("success");
+
+      const url = `https://script.google.com/macros/s/AKfycbyCkXBcVPwj1C8NyssKaggthISfKGoJJMhDSHXC05h4X4gwKtxeG-CHE5R8gmnw37Ib/exec?usuario=${encodeURIComponent(user)}&senha=${encodeURIComponent(pass)}`;
 
       try {
         const res = await fetch(url);
@@ -194,9 +204,11 @@
           window.location.href = "Transiçao.html";
         } else {
           msg.textContent = "Usuário ou senha incorretos.";
+          msg.classList.remove("success");
         }
       } catch (err) {
         msg.textContent = "Erro: " + err.message;
+        msg.classList.remove("success");
         console.error("Erro ao conectar:", err);
       }
     }

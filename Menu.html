@@ -69,6 +69,28 @@
       background-color: #365aa8;
     }
 
+    .btn-voltar {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      z-index: 2;
+      background-color: rgba(255, 255, 255, 0.1);
+      border: none;
+      color: white;
+      font-size: 1.2rem;
+      padding: 8px 14px;
+      border-radius: 30px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      backdrop-filter: blur(4px);
+      transition: background-color 0.3s;
+    }
+
+    .btn-voltar:hover {
+      background-color: rgba(255, 255, 255, 0.2);
+    }
+
     @keyframes fadeIn {
       from { opacity: 0; transform: translateY(10px); }
       to { opacity: 1; transform: translateY(0); }
@@ -76,6 +98,10 @@
   </style>
 </head>
 <body>
+
+  <button class="btn-voltar" onclick="window.history.back()">
+    &#8592; Voltar
+  </button>
 
   <div class="container">
     <img src="https://llucascoelho.github.io/Contas/logosemfundo.png" class="logo" alt="Logo" />
