@@ -70,38 +70,6 @@
       color: #bbb;
     }
 
-    .input-wrapper {
-      position: relative;
-      margin-bottom: 18px;
-    }
-
-    .input-wrapper input {
-      padding-right: 42px;
-    }
-
-    .toggle-password {
-      position: absolute;
-      top: 25px;
-      right: 12px;
-      transform: translateY(-50%);
-      background: none;
-      border: none;
-      padding: 0;
-      margin: 0;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 24px;
-      height: 24px;
-    }
-
-    .toggle-password svg {
-      width: 20px;
-      height: 20px;
-      fill: #bbb;
-    }
-
     button {
       background-color: #4162AB;
       color: white;
@@ -140,44 +108,15 @@
     <input type="text" id="username" placeholder="Usuário"
            autocomplete="username" autocorrect="off" autocapitalize="sentences" />
 
-    <div class="input-wrapper">
-      <input type="password" id="password" placeholder="Senha"
-             inputmode="numeric" pattern="[0-9]*"
-             autocomplete="current-password" autocorrect="off" />
-      <button type="button" class="toggle-password" onclick="togglePassword(this)" aria-label="Exibir senha">
-        <svg id="eyeIcon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-          <path d="M12 5c-7 0-11 7-11 7s4 7 11 7 11-7 11-7-4-7-11-7zm0 12
-                   c-2.8 0-5-2.2-5-5s2.2-5 5-5 5 2.2 5 5-2.2 5-5 5zm0-8a3 3
-                   0 100 6 3 3 0 000-6z"/>
-        </svg>
-      </button>
-    </div>
+    <input type="password" id="password" placeholder="Senha"
+           inputmode="numeric" pattern="[0-9]*"
+           autocomplete="current-password" autocorrect="off" />
 
     <button onclick="login()">Entrar</button>
     <div class="message" id="message"></div>
   </div>
 
   <script>
-    let senhaVisivel = false;
-
-    function togglePassword(btn) {
-      const senhaInput = document.getElementById("password");
-      const eyeIcon = document.getElementById("eyeIcon");
-
-      if (senhaVisivel) {
-        senhaInput.type = "password";
-        eyeIcon.innerHTML = '<path d="M12 5c-7 0-11 7-11 7s4 7 11 7 11-7 11-7-4-7-11-7zm0 12\
-        c-2.8 0-5-2.2-5-5s2.2-5 5-5 5 2.2 5 5-2.2 5-5 5zm0-8a3 3 0 100 6 3 3 0 000-6z"/>';
-      } else {
-        senhaInput.type = "text";
-        eyeIcon.innerHTML = '<path d="M12 5c-7 0-11 7-11 7s4 7 11 7c1.7 0 3.3-.4 4.8-1.1l2.1\
-        2.1 1.4-1.4-18-18-1.4 1.4 2.1 2.1C5.3 6.7 3.9 8.6 3 12c1.2 3.9 5 7 9 7\
-        1.4 0 2.7-.3 3.9-.8l2.1 2.1 1.4-1.4-18-18-1.4 1.4 2.1 2.1z"/>';
-      }
-
-      senhaVisivel = !senhaVisivel;
-    }
-
     async function login() {
       const user = document.getElementById("username").value.trim();
       const pass = document.getElementById("password").value.trim();
