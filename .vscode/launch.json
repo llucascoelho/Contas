@@ -7,7 +7,7 @@
         {
             "type": "msedge",
             "request": "launch",
-            "name": "Open Login.html",
+            "name": "Login.html",
             "file": "c:\\Users\\Lucas Coelho\\OneDrive - Somar Life\\0 - Lucas\\Contas\\Login.html"
         }
     ]
