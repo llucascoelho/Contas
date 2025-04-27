@@ -143,6 +143,7 @@
       display: inline-flex;
       align-items: center;
       margin-top: 10px;
+      margin-left: 0;
       font-size: 14px;
       color: #6200ea;
       cursor: pointer;
@@ -155,6 +156,8 @@
       border: 1px solid #6200ea;
       border-radius: 3px;
       margin-right: 5px;
+      cursor: pointer;
+      position: relative;
       background-color: transparent;
     }
     .flag-checkbox input[type="checkbox"]:checked::after {
@@ -203,6 +206,24 @@
       background-color: #3700b3;
     }
 
+    .text-center {
+      text-align: center;
+    }
+    button[type="submit"] {
+      background-color: #6200ea;
+      color: #ffffff;
+      border: none;
+      padding: 12px 30px;
+      font-size: 18px;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s, transform 0.3s;
+    }
+    button[type="submit"]:hover {
+      background-color: #3700b3;
+      transform: translateY(-3px);
+    }
+
     @keyframes fadeIn {
       from { opacity: 0; transform: translateY(10px); }
       to   { opacity: 1; transform: translateY(0); }
@@ -247,7 +268,7 @@
   <div class="container">
     <form id="contasForm" action="#" method="post">
       <h1>Controle de Contas</h1>
-      
+            
       <!-- Seletor Geral -->
       <div class="form-group">
         <label for="formSelector">Selecione a Conta</label>
@@ -426,6 +447,11 @@
           </div>
         </div>
       </fieldset>
+
+      <!-- Botão enviar -->      
+      <div class="text-center mt-4">
+        <button type="submit" class="btn btn-primary">Enviar</button>
+      </div>
     </form>
   </div>
   
