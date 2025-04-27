@@ -137,16 +137,25 @@
       color: #ffffff;
     }
     .date-container input[type="date"] {
+      /* desativa o estilo nativo que costuma encolher o campo */
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      appearance: none;
+      background-image: none;
+
+      /* agora herdando o mesmo estilo dos outros inputs */
       width: 100%;
       padding: 10px 15px;
       border: 1px solid #444;
       border-radius: 5px;
       font-size: 16px;
+      line-height: 1.5;
       background-color: #2a2a2a;
       color: #ffffff;
       box-sizing: border-box;
-      line-height: 1.5;      /* garante espaço vertical para a fonte */
-      min-height: 2.5rem;    /* igual à altura padrão do Bootstrap */
+
+      /* força altura igual aos demais .form-control */
+      height: 2.5rem;
     }
     .date-container {
       margin-bottom: 10px;
